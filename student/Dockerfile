@@ -20,8 +20,8 @@ ENV OTEL_LOGS_EXPORTER="otlp"
 ENV OTEL_METRICS_EXPORTER="otlp"
 ENV OTEL_TRACES_EXPORTER="otlp"
 ENV OTEL_EXPORTER_OTLP_ENDPOINT="localhost:4317"
-ENV OTEL_SERVICE_NAME=todoui-flask
+ENV OTEL_SERVICE_NAME=student
 
 # Run app.py when the container launches
 # CMD ["flask", "run", "-p", "5000"]
-CMD ["opentelemetry-instrument","python","app.py"]
+CMD ["opentelemetry-instrument","python","student.py"]
