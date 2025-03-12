@@ -10,6 +10,8 @@ COPY . /app
 # Install any needed packages specified in requirements.txt
 RUN pip install -r requirements.txt
 
+RUN pip install opentelemetry-distro opentelemetry-exporter-otlp
+
 RUN opentelemetry-bootstrap --action=install
 
 # Make port 5000 available to the world outside this container
