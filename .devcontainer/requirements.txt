@@ -1,4 +1,4 @@
-Flask==*
+Flask==3.1.0
 opentelemetry-api==1.26.0
 opentelemetry-distro==0.47b0
 opentelemetry-exporter-otlp==1.26.0
