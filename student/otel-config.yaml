@@ -2,11 +2,13 @@ receivers:
   otlp:
     protocols:
       grpc:
+        endpoint: "0.0.0.0:4317"
       http:
+        endpoint: "0.0.0.0:4318"  
 
 exporters:
-  logging:
-    loglevel: debug
+  debug:
+    verbosity: detailed
   otlp:
     endpoint: "http://otel-collector:4317"
     tls:
@@ -16,4 +18,12 @@ service:
   pipelines:
     traces:
       receivers: [otlp]
-      exporters: [logging]
+      exporters: [debug, otlp]
+
+    metrics:
+      receivers: [otlp]
+      exporters: [debug, otlp]
+
+    logs:
+      receivers: [otlp]
+      exporters: [debug, otlp]
