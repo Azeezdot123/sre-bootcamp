@@ -1,0 +1,79 @@
+{
+	"name": "otel-getting-started",
+	"workspaceFolder": "/workspaces/sre-bootcamp/student",
+	// "image": "if youhave a link to you image that can be used here or you comment this out and use the build option.",
+	"build": {
+        "dockerfile": "Dockerfile",
+        "context": "."
+    },
+	"overrideCommand": false,
+	"runArgs": [
+		"--privileged"
+	],
+	"forwardPorts": [
+		5000
+		// 5001,
+		// 9090
+	],
+	"containerEnv": {
+		"SHELL": "/bin/bash",
+		"EXERCISES": "/workspaces/sre-bootcamp/student"
+	},
+	"portsAttributes": {
+		"5000": {
+			"label": "Python Flask app"
+		},
+		// "5001": {
+		// 	"label": "Python Flask app"
+		// },
+		// "9090": {
+		// 	"label": "Prometheus UI"
+		// }
+	},
+	"customizations": {
+		"vscode": {
+			"settings": {
+				"files.autoSave": "afterDelay",
+				"[python]": {
+					"editor.formatOnSave": true
+				},
+				"[dockercompose][yaml]": {
+					"editor.defaultFormatter": "redhat.vscode-yaml",
+					"editor.formatOnPaste": true,
+					"editor.formatOnSave": true,
+					"editor.insertSpaces": true,
+					"editor.tabSize": 2
+				},
+				"[adoc][markdown]": {
+					"editor.defaultFormatter": "vscode.markdown-language-features",
+					"editor.formatOnPaste": true,
+					"editor.formatOnSave": true,
+					"editor.insertSpaces": true,
+					"editor.tabSize": 2
+				},
+				"[dockerfile]": {
+					"editor.quickSuggestions": {
+						"strings": true
+					},
+					"editor.defaultFormatter": "ms-azuretools.vscode-docker"
+				},
+				"python.analysis.typeCheckingMode": "strict",
+				"python.analysis.autoImportCompletions": true
+			},
+			"extensions": [
+				"vscjava.vscode-java-pack",
+				"vscjava.vscode-java-dependency",
+				"ms-python.vscode-pylance",
+				"charliermarsh.ruff",
+				"ms-python.isort",
+				"ms-python.python",
+				"njpwerner.autodocstring",
+				"KevinRose.vsc-python-indent",
+				"ms-python.black-formatter",
+				"usernamehw.errorlens",
+				"redhat.vscode-yaml",
+				"ms-azuretools.vscode-docker"
+			]
+		}
+	}
+}

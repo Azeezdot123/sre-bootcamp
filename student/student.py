@@ -136,4 +136,4 @@ if __name__ == '__main__':
     initialize_database() 
 
     logging.info("Starting Flask application...")
-    app.run(debug=True)
+    app.run()
