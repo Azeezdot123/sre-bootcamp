@@ -35,7 +35,7 @@ services:
     volumes:
       - ./prometheus.yaml:/etc/prometheus/prometheus.yaml
     command: 
-      - --config.file=/etc/prometheus/prometheus.yml"
+      - --config.file=/etc/prometheus/prometheus.yaml
       - --storage.tsdb.path=/prometheus
       - --storage.tsdb.retention.time=3h
       - --web.enable-lifecycle
@@ -47,6 +47,18 @@ services:
       - otel-collector
     networks:
       - otel-network
+
+  # Grafana
+  Grafana:
+    image: grafana/grafana:main
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    environment:
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: admin
+    depends_on:
+      - prometheus
 
 networks:
   otel-network:
