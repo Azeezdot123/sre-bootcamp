@@ -7,6 +7,8 @@ receivers:
         endpoint: "0.0.0.0:4318"  
 
 exporters:
+  prometheus:
+    endpoint: "0.0.0.o:9464" 
   debug:
     verbosity: detailed
   otlp:
@@ -22,7 +24,8 @@ service:
 
     metrics:
       receivers: [otlp]
-      exporters: [debug, otlp]
+      exporters: [prometheus]
+      # exporters: [debug, otlp]
 
     logs:
       receivers: [otlp]

@@ -13,6 +13,7 @@ services:
     networks:
       - otel-network
 
+  # OpenTelemetry Collector
   otel-collector:
     image: otel/opentelemetry-collector
     container_name: otel-collector
@@ -22,6 +23,28 @@ services:
     volumes:
       - ./otel-config.yaml:/etc/otel-config.yaml
     command: ["--config=/etc/otel-config.yaml"]
+    networks:
+      - otel-network
+
+  # Prometheus
+  prometheus:
+    image: quay.io/prometheus/prometheus:v2.52.0
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yaml:/etc/prometheus/prometheus.yaml
+    command: 
+      - --config.file=/etc/prometheus/prometheus.yml"
+      - --storage.tsdb.path=/prometheus
+      - --storage.tsdb.retention.time=3h
+      - --web.enable-lifecycle
+      - --enable-feature=otlp-write-receiver
+      - --web.route-prefix=/
+      # - --enable-feature=exemplar-storage
+    restart: unless-stopped
+    depends_on:
+      - otel-collector
     networks:
       - otel-network
 
