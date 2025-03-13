@@ -68,7 +68,7 @@ services:
     ports:
       - "3100:3100"
     depends_on:
-      - grafana
+      - otel-collector
     networks:
       - otel-network
   
@@ -79,7 +79,7 @@ services:
     ports:
       - "3101:3100"
     depends_on:
-      - grafana
+      - otel-collector
     networks:
       - otel-network
 networks:
