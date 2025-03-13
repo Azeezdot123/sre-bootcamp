@@ -1,6 +1,18 @@
+server:
+  http_listen_port: 3100
+  grpc_listen_port: 4318
+
 storage:
   trace:
-    backend: filesystem
-    filesystem:
+    backend: local
+    local:
       path: /var/tempo/traces
-      access_mode: readwrite
+
+
+
+# storage:
+#   trace:
+#     backend: filesystem
+#     filesystem:
+#       path: /var/tempo/traces
+#       access_mode: readwrite
