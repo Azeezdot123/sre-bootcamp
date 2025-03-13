@@ -59,6 +59,8 @@ services:
       GF_SECURITY_ADMIN_PASSWORD: admin
     depends_on:
       - prometheus
+    networks:
+      - otel-network
 
 networks:
   otel-network:
