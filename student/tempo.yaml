@@ -6,13 +6,43 @@ storage:
   trace:
     backend: local
     local:
-      path: /var/tempo/traces
+      path: ./tempo/traces
+      access_mode: readwrite
+
+ingester:
+  trace_idle_period: 10s
+  max_block_bytes: 1000000
+  max_block_duration: 5m
+
+compactor:
+  compaction:
+    block_retention: 24h
 
 
+
+
+
+
+
+# server:
+#   http_listen_port: 3100
+#   grpc_listen_port: 4318
 
 # storage:
 #   trace:
-#     backend: filesystem
-#     filesystem:
+#     backend: local
+#     local:
 #       path: /var/tempo/traces
-#       access_mode: readwrite
+
+# ingester:
+#   trace_idle_period: 10s  # Prevents traces from being stuck
+#   max_block_bytes: 1_000_000  # Reduce block size to avoid memory issues
+#   max_block_duration: 5m  # Ensures blocks are flushed every 5 mins
+
+# compactor:
+#   compaction:
+#     block_retention: 24h  # Keeps traces for 24 hours
+
+# overrides:
+#   metrics_generator_processors: [service-graphs, span-metrics]  # Enable metrics
+

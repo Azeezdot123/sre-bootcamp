@@ -67,12 +67,13 @@ services:
     image: grafana/tempo:latest
     container_name: tempo
     volumes:
-      - tempo_data:/var/tempo
+      - ./tempo:/var/tempo
       - ./tempo-config.yaml:/etc/tempo-config.yaml 
     command: ["--config=/etc/tempo-config.yaml"]
     ports:
       - "3100:3100"  # Query API (Grafana)
       - "4319:4318"  # OTLP ingestion
+    restart: unless-stopped
     depends_on:
       - otel-collector
     networks:
@@ -90,26 +91,9 @@ services:
       - otel-collector
     networks:
       - otel-network
-  
-  # promtail
-  # promtail:
-  #   image: grafana/promtail
-  #   container_name: promtail
-  #   volumes:
-  #     - ./promtail-config.yaml:/etc/promtail/promtail-config.yaml
-  #   command: 
-  #     - --config.file=/etc/promtail/promtail-config.yaml
-  #   ports:
-  #     - "9080:9080"    # HTTP server for metrics
-  #     - "4320:4318"    # OTLP HTTP log ingestion
-  #   depends_on:
-  #     - loki
-  #   networks:
-  #     - otel-network
 
 volumes:
   prometheus_data:
-  tempo_data:
   loki_data:
 networks:
   otel-network:
