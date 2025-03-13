@@ -11,10 +11,13 @@ exporters:
     endpoint: "0.0.0.0:9090"
     resource_to_telemetry_conversion:
       enabled: true
+      
   otlphttp:
     endpoint: "http://tempo:4318"
-  loki:
-    endpoint: "http://loki:3100/loki/api/v1/push"
+
+  otlphttp/loki:
+    endpoint: "http://promtail:4318" 
+  
   # debug:
   #   verbosity: detailed
   # otlp:
@@ -34,4 +37,4 @@ service:
 
     logs:
       receivers: [otlp]
-      exporters: [loki]
+      exporters: [otlphttp/loki]

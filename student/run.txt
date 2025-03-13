@@ -1,0 +1,2 @@
+mkdir -p /var/tempo/traces
+chmod -R 777 /var/tempo/traces

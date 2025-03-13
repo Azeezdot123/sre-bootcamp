@@ -89,6 +89,22 @@ services:
       - otel-collector
     networks:
       - otel-network
+  
+  # promtail
+  promtail:
+    image: grafana/promtail
+    container_name: promtail
+    volumes:
+      - ./promtail-config.yaml:/etc/promtail/promtail-config.yaml
+    command: 
+      - --config.file=/etc/promtail/promtail-config.yaml
+    ports:
+      - "9080:9080"    # HTTP server for metrics
+      - "4318:4318"    # OTLP HTTP log ingestion
+    depends_on:
+      - loki
+    networks:
+      - otel-network
 
 volumes:
   prometheus_data:
