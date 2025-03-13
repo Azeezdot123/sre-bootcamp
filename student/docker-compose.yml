@@ -34,10 +34,11 @@ services:
       - "9090:9090"
     volumes:
       - ./prometheus.yaml:/etc/prometheus/prometheus.yaml
+      - prometheus_data:/prometheus
     command: 
       - --config.file=/etc/prometheus/prometheus.yaml
       - --storage.tsdb.path=/prometheus
-      - --storage.tsdb.retention.time=3h
+      - --storage.tsdb.retention.time=200h
       - --web.enable-lifecycle
       - --enable-feature=otlp-write-receiver
       - --web.route-prefix=/
@@ -65,8 +66,11 @@ services:
   tempo:
     image: grafana/tempo:latest
     container_name: tempo
+    volumes:
+      - tempo_data:/var/tempo
     ports:
-      - "3100:3100"
+      - "3100:3100"  # Query API (Grafana)
+      - "4318:4318"  # OTLP ingestion
     depends_on:
       - otel-collector
     networks:
@@ -76,12 +80,19 @@ services:
   loki:
     image: grafana/loki
     container_name: loki
+    volumes:
+      - loki_data:/loki
     ports:
       - "3101:3100"
     depends_on:
       - otel-collector
     networks:
       - otel-network
+
+volumes:
+  prometheus_data:
+  tempo_data:
+  loki_data:
 networks:
   otel-network:
     driver: bridge
