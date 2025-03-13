@@ -61,7 +61,27 @@ services:
       - prometheus
     networks:
       - otel-network
-
+  # Tempo
+  tempo:
+    image: grafana/tempo:latest
+    container_name: tempo
+    ports:
+      - "3100:3100"
+    depends_on:
+      - grafana
+    networks:
+      - otel-network
+  
+  # loki
+  loki:
+    image: grafana/loki
+    container_name: loki
+    ports:
+      - "3101:3100"
+    depends_on:
+      - grafana
+    networks:
+      - otel-network
 networks:
   otel-network:
     driver: bridge

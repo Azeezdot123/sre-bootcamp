@@ -13,12 +13,14 @@ exporters:
       enabled: true
   otlphttp:
     endpoint: "http://tempo:4318"
-  debug:
-    verbosity: detailed
-  otlp:
-    endpoint: "http://otel-collector:4317"
-    tls:
-      insecure: true
+  loki:
+    endpoint: "http://loki:3100/loki/api/v1/push"
+  # debug:
+  #   verbosity: detailed
+  # otlp:
+  #   endpoint: "http://otel-collector:4317"
+  #   tls:
+  #     insecure: true
 
 service:
   pipelines:
@@ -32,4 +34,4 @@ service:
 
     logs:
       receivers: [otlp]
-      exporters: [debug, otlp]
+      exporters: [loki]
