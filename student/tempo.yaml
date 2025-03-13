@@ -1,0 +1,6 @@
+storage:
+  trace:
+    backend: filesystem
+    filesystem:
+      path: /var/tempo/traces
+      access_mode: readwrite

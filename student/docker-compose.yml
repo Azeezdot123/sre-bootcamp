@@ -68,9 +68,10 @@ services:
     container_name: tempo
     volumes:
       - tempo_data:/var/tempo
+      - /var/tempo/traces:/var/tempo/traces
     ports:
       - "3100:3100"  # Query API (Grafana)
-      - "4318:4318"  # OTLP ingestion
+      - "4319:4318"  # OTLP ingestion
     depends_on:
       - otel-collector
     networks:
