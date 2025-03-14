@@ -2,11 +2,19 @@ receivers:
   otlp:
     protocols:
       grpc:
+        endpoint: "0.0.0.0:4317"
       http:
-      # grpc:
-      #   endpoint: "0.0.0.0:4317"
-      # http:
-      #   endpoint: "0.0.0.0:4318"  
+        endpoint: "0.0.0.0:4318"
+
+processors:
+  batch:
+    timeout: 5s
+    # loki
+  resource/add:
+    attributes:
+      - key: service.name
+        action: upsert
+        value: "unknown-service"
 
 exporters:
   prometheus:
@@ -14,8 +22,9 @@ exporters:
     resource_to_telemetry_conversion:
       enabled: true
 
-  otlphttp/loki:
+  loki:
     endpoint: "http://loki:3100/loki/api/v1/push"
+
 
   # otlphttp:
   #   endpoint: "http://tempo:4317"
@@ -31,9 +40,9 @@ exporters:
 
 service:
   pipelines:
-    # traces:
-    #   receivers: [otlp]
-    #   exporters: [otlphttp]
+    traces:
+      receivers: [otlp]
+      exporters: [debug]
 
     metrics:
       receivers: [otlp]
@@ -41,4 +50,5 @@ service:
 
     logs:
       receivers: [otlp]
-      exporters: [otlphttp/loki, debug]
+      processors: [resource/add]
+      exporters: [loki, debug]
