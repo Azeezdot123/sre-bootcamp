@@ -1,22 +1,40 @@
 server:
-  http_listen_port: 3100
-  grpc_listen_port: 4318
+  http_listen_port: 3200
+
+distributor:
+  receivers:
+    otlp:
+      protocols:
+        http:
+        grpc:
 
 storage:
   trace:
     backend: local
     local:
-      path: ./tempo/traces
-      access_mode: readwrite
+      path: /tmp/tempo/blocks
 
-ingester:
-  trace_idle_period: 10s
-  max_block_bytes: 1000000
-  max_block_duration: 5m
 
-compactor:
-  compaction:
-    block_retention: 24h
+
+# server:
+#   http_listen_port: 3200
+#   grpc_listen_port: 4318
+
+# storage:
+#   trace:
+#     backend: local
+#     local:
+#       path: ./tempo/traces
+#       access_mode: readwrite
+
+# ingester:
+#   trace_idle_period: 10s
+#   max_block_bytes: 1000000
+#   max_block_duration: 5m
+
+# compactor:
+#   compaction:
+    # block_retention: 24h
 
 
 
