@@ -1,8 +1,6 @@
 receivers:
   otlp:
     protocols:
-      grpc:
-        endpoint: "0.0.0.0:4317"
       http:
         endpoint: "0.0.0.0:4318"
 
@@ -14,7 +12,7 @@ processors:
     attributes:
       - key: service.name
         action: upsert
-        value: "unknown-service"
+        value: "student"
 
 exporters:
   prometheus:
@@ -26,29 +24,25 @@ exporters:
     endpoint: "http://loki:3100/loki/api/v1/push"
 
 
-  # otlphttp:
-  #   endpoint: "http://tempo:4317"
-  #   tls:
-  #     insecure: true
-  
-  debug:
-    verbosity: detailed
-  otlp:
-    endpoint: "http://otel-collector:4317"
+  otlp/tempo:
+    endpoint: "http://tempo:4318"
     tls:
       insecure: true
+  
 
 service:
   pipelines:
     traces:
       receivers: [otlp]
-      exporters: [debug]
+      processors: [batch, resource/add]
+      exporters: [otlp/tempo]
 
     metrics:
       receivers: [otlp]
-      exporters: [prometheus, debug]
+      processors: [resource/add]
+      exporters: [prometheus]
 
     logs:
       receivers: [otlp]
       processors: [resource/add]
-      exporters: [loki, debug]
+      exporters: [loki]

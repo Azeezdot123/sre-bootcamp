@@ -19,9 +19,12 @@ EXPOSE 5000
 
 # Define environment variable
 ENV OTEL_LOGS_EXPORTER="otlp"
+ENV OTEL_EXPORTER_OTLP_ENDPOINT="http://otel-collector:4318"
+ENV OTEL_EXPORTER_OTLP_PROTOCOL=http
+
 ENV OTEL_METRICS_EXPORTER="otlp"
 ENV OTEL_TRACES_EXPORTER="otlp"
-ENV OTEL_EXPORTER_OTLP_ENDPOINT="localhost:4317"
+# ENV OTEL_EXPORTER_OTLP_ENDPOINT="localhost:4318"
 ENV OTEL_SERVICE_NAME=student
 
 # Run app.py when the container launches

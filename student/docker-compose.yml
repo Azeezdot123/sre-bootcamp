@@ -1,13 +1,13 @@
 version: "3.8"
 
 services:
-  student-app:
+  student:
     build: .
-    container_name: student-app
+    container_name: student
     ports:
       - "5000:5000"
     environment:
-      OTEL_EXPORTER_OTLP_ENDPOINT: "http://otel-collector:4317"
+      OTEL_EXPORTER_OTLP_ENDPOINT: "http://otel-collector:4318"
     depends_on:
       - otel-collector
     networks:
@@ -15,20 +15,23 @@ services:
 
   # OpenTelemetry Collector
   otel-collector:
-    image: otel/opentelemetry-collector-contrib:latest
+    image: ghcr.io/open-telemetry/opentelemetry-collector-releases/opentelemetry-collector-contrib:0.91.0
     container_name: otel-collector
     ports:
-      - "4317:4317"  # OTLP gRPC
-      # - "4318:4318"  # OTLP HTTP
+      # - "4317:4317"  # OTLP gRPC
+      - "4318:4318"  # OTLP HTTP
     command: ["--config=/etc/otel-config.yaml"]
     volumes:
       - ./otel-config.yaml:/etc/otel-config.yaml
+    depends_on:
+      - tempo
     networks:
       - otel-network
 
   # Prometheus
   prometheus:
-    image: quay.io/prometheus/prometheus:v2.52.0
+    # image: quay.io/prometheus/prometheus:v2.52.0
+    image: prom/prometheus:main
     container_name: prometheus
     ports:
       - "9090:9090"
@@ -50,7 +53,8 @@ services:
 
   # Grafana
   grafana:
-    image: grafana/grafana:11.5.2
+    # image: grafana/grafana:11.5.2
+    image: grafana/grafana-oss:main-ubuntu
     container_name: grafana
     ports:
       - "3000:3000"
@@ -67,10 +71,11 @@ services:
 
  # loki
   loki:
-    image: grafana/loki
+    image: grafana/loki:2.9.4
     container_name: loki
     volumes:
       - loki_data:/loki
+      - ./loki:/etc/loki
       - ./loki-config.yaml:/etc/loki/loki-config.yaml
     command: ["-config.file=/etc/loki/loki-config.yaml"]
     ports:
@@ -81,20 +86,20 @@ services:
       - otel-network
 
   # Tempo
-  # tempo:
-  #   image: grafana/tempo:latest
-  #   container_name: tempo
-  #   volumes:
-  #     - ./tempo.yaml:/etc/tempo-config.yaml 
-  #   command: ["--config=/etc/tempo-config.yaml"]
-  #   # ports:
-  #   #   - "3100:3100"  # Query API (Grafana)
-  #   #   - "4319:4318"  # OTLP ingestion
-  #   restart: unless-stopped
-  #   depends_on:
-  #     - otel-collector
-  #   networks:
-  #     - otel-network
+  tempo:
+    image: grafana/tempo:main-39a47ff
+    container_name: tempo
+    # volumes:
+    #   - ./tempo.yaml:/etc/tempo-config.yaml 
+    # command: ["--config=/etc/tempo-config.yaml"]
+    command: [ "--target=all", "--storage.trace.backend=local", "--storage.trace.local.path=/var/tempo", "--auth.enabled=false" ]
+    ports:
+      - "3200:3200"  # Query API (Grafana)
+      - "14318:4318"  # OTLP ingestion
+      - "4317:4317"  # OTLP gRPC
+    restart: unless-stopped
+    networks:
+      - otel-network
   # tempo:
   #   image: grafana/tempo:main-93d2b42
   #   container_name: tempo
